@@ -20,23 +20,21 @@ export default function Application() {
   const [title, setTitle] = useState('');
   const [tasks, setTasks] = useState<TaskProps[]>([]);
 
+  async function loadTasks() {
+    const realm = await getRealm();
+
+    console.log('PATH', realm.path);
+
+    const realmTasks = await realm.objects<TaskProps[]>('Task');
+
+    setTasks(realmTasks.toJSON());
+  }
+
   useEffect(() => {
-    async function loadTasks() {
-      const realm = await getRealm();
-
-      const realmTasks = await realm.objects<TaskProps[]>('Task');
-
-      setTasks(realmTasks.toJSON());
-    }
-
     loadTasks();
   }, []);
 
   async function createTask() {
-    if (!title) {
-      return;
-    }
-
     try {
       const _id = `task-${String(Math.random() * 100000000000)}`;
 
@@ -49,6 +47,8 @@ export default function Application() {
           status: 'Todo',
         });
       });
+
+      loadTasks();
     } catch (error) {
       console.log(error);
     }
