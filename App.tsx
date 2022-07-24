@@ -12,11 +12,7 @@ import React from 'react';
 
 import Application from './src';
 const App = () => {
- 
-  return (
-    <Application />
-  );
+  return <Application />;
 };
-
 
 export default App;
